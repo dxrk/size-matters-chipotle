@@ -108,7 +108,7 @@ const Page: React.FC = () => {
       <Card className="w-10/12 mx-auto flex flex-col items-center justify-center">
         <CardHeader className="flex items-center justify-center">
           <CardTitle>Size Matters, Chipotle.</CardTitle>
-          <h2 className="text-gray-500">
+          <h2 className="text-gray-500 text-center">
             Find the nearest Chipotle location based on your current location or
             search for a location.
           </h2>
@@ -139,7 +139,7 @@ const Page: React.FC = () => {
           </div>
         </CardContent>
         <CardFooter>
-          <CardDescription className="select-none">
+          <CardDescription className="select-none text-center">
             In the wise words of your CEO,{" "}
             <q>all you got to do is, kinda, like...</q> We <i>all</i> know that
             is not going to work. <strong>Well, checkmate.</strong>
