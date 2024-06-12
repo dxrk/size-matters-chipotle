@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -25,7 +24,6 @@ const Page: React.FC = () => {
 
   const [storeList, setStoreList] = useState<Store[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("New York, NY");
-  const [loading, setLoading] = useState<boolean>(true);
   const [lat, setLat] = useState<number>(40.7128);
   const [lng, setLng] = useState<number>(-74.006);
 
@@ -49,9 +47,7 @@ const Page: React.FC = () => {
         });
       }
 
-      setLoading(true);
       const data: any = await res.json();
-      setLoading(false);
 
       if (data.stores) {
         setStoreList(data.stores);
@@ -74,7 +70,6 @@ const Page: React.FC = () => {
         });
       }
     } catch (err: any) {
-      setLoading(false);
       toast({
         title: "Error",
         description: err.message,
@@ -104,7 +99,7 @@ const Page: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-screen items-center justify-center select-none">
       <Card className="w-10/12 mx-auto flex flex-col items-center justify-center">
         <CardHeader className="flex items-center justify-center">
           <CardTitle>Size Matters, Chipotle.</CardTitle>
@@ -126,23 +121,20 @@ const Page: React.FC = () => {
             Search
           </Button>
           <div className="w-full">
-            {loading ? (
-              <Skeleton className="h-[500px] w-full" />
-            ) : (
-              <Map
-                storeList={storeList}
-                lat={lat}
-                lng={lng}
-                onUpdateLocation={handleUpdateLocation}
-              />
-            )}
+            <Map
+              storeList={storeList}
+              lat={lat}
+              lng={lng}
+              onUpdateLocation={handleUpdateLocation}
+            />
           </div>
         </CardContent>
         <CardFooter>
-          <CardDescription className="select-none text-center">
+          <CardDescription className="text-center">
             In the wise words of your CEO,{" "}
-            <q>all you got to do is, kinda, like...</q> We <i>all</i> know that
-            is not going to work. <strong>Well, checkmate.</strong>
+            <q>all you got to do is, kinda, like...</q>{" "}
+            <i>We all know that is not going to work.</i>{" "}
+            <strong>Checkmate.</strong>
           </CardDescription>
         </CardFooter>
       </Card>
