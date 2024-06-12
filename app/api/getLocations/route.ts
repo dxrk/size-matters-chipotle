@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { getCoords } from "@/utils/getCoords";
-import mongoose, { Schema, model, models, Document } from "mongoose";
 import connectToDatabase from "@/lib/mongodb";
 import type { Store } from "@/lib/models";
 import { Review } from "@/lib/models";

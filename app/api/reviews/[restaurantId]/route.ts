@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import mongoose, { Schema, model, models, Document } from "mongoose";
 import connectToDatabase from "@/lib/mongodb";
 import rateLimiter from "@/lib/rateLimiter";
 import { Review } from "@/lib/models";
