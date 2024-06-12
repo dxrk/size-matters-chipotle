@@ -99,10 +99,13 @@ const Page: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex h-screen items-center justify-center select-none">
-      <Card className="w-10/12 mx-auto flex flex-col items-center justify-center">
+    <div className="md:container select-none font-mono flex items-center justify-center min-h-screen pt-16 pb-16">
+      <Card className="w-11/12 md:w-10/12 mx-auto flex flex-col items-center justify-center h-fit">
         <CardHeader className="flex items-center justify-center">
-          <CardTitle>Size Matters, Chipotle.</CardTitle>
+          <CardTitle className="text-center">
+            <i>Size Matters,</i>
+            <br /> Chipotle.
+          </CardTitle>
           <h2 className="text-gray-500 text-center">
             Find the nearest Chipotle location based on your current location or
             search for a location.

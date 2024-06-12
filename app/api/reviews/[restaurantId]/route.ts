@@ -23,22 +23,23 @@ const rateLimiterMiddleware = rateLimiter({
 });
 
 export async function GET(
-  req: NextRequest & { params: { restaurantId: string } }
+  req: NextRequest,
+  { params }: { params: { restaurantId: number } }
 ) {
   await connectToDatabase();
-  const rateLimitResponse = rateLimiterMiddleware(req);
 
-  if (rateLimitResponse.status === 429) {
-    return rateLimitResponse;
-  }
-
-  const { restaurantId } = req.params as { restaurantId: string };
+  const { restaurantId } = params;
   const reviews = await Review.find({ restaurantId: Number(restaurantId) });
-  return NextResponse.json(reviews);
+
+  const totalRatings = reviews.reduce((acc, review) => acc + review.rating, 0);
+  const averageRating = reviews.length > 0 ? totalRatings / reviews.length : 0;
+
+  return NextResponse.json({ reviews, averageRating });
 }
 
 export async function POST(
-  req: NextRequest & { params: { restaurantId: string } }
+  req: NextRequest,
+  { params }: { params: { restaurantId: number } }
 ) {
   await connectToDatabase();
   const rateLimitResponse = rateLimiterMiddleware(req);
@@ -48,7 +49,7 @@ export async function POST(
   }
 
   const { rating } = await req.json();
-  const { restaurantId } = req.params as { restaurantId: string };
+  const { restaurantId } = params;
 
   const review = new Review({ restaurantId: Number(restaurantId), rating });
   await review.save();

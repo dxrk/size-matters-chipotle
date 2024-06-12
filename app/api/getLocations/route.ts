@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { getCoords } from "@/utils/getCoords";
+import mongoose, { Schema, model, models, Document } from "mongoose";
+import connectToDatabase from "@/lib/mongodb";
+import type { Store } from "@/components/Map";
+
+interface IReview extends Document {
+  restaurantId: number;
+  rating: number;
+  createdAt: Date;
+}
+
+const reviewSchema = new Schema<IReview>({
+  restaurantId: { type: Number, required: true },
+  rating: { type: Number, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const Review = models.Review || model<IReview>("Review", reviewSchema);
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,15 +61,35 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const stores = response.data.data.map((restaurant: any) => ({
+    const stores: Store[] = response.data.data.map((restaurant: any) => ({
       restaurantNumber: restaurant.restaurantNumber,
       name: restaurant.restaurantName,
       address: `${restaurant.addresses[0].addressLine1}, ${restaurant.addresses[0].locality}, ${restaurant.addresses[0].administrativeArea} ${restaurant.addresses[0].postalCode}`,
       latitude: restaurant.addresses[0].latitude,
       longitude: restaurant.addresses[0].longitude,
+      averageRating: NaN,
+      totalRatings: NaN,
     }));
 
-    return NextResponse.json({ stores, coords });
+    await connectToDatabase();
+
+    const updatedStores = await Promise.all(
+      stores.map(async (store) => {
+        const reviews = await Review.find({
+          restaurantId: store.restaurantNumber,
+        });
+
+        const totalRatings = reviews.reduce(
+          (acc, review) => acc + review.rating,
+          0
+        );
+        const averageRating =
+          reviews.length > 0 ? totalRatings / reviews.length : 0;
+        return { ...store, averageRating, totalRatings: reviews.length };
+      })
+    );
+
+    return NextResponse.json({ stores: updatedStores, coords });
   } catch (error: any) {
     const status = error.response?.status || 500;
     const message = error.response?.data?.error || error.message;

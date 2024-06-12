@@ -74,27 +74,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@keyframes pulsing {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.5);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.pulsing-icon {
-  animation: pulsing 1.5s infinite;
-  width: 12px; /* Adjust size as needed */
-  height: 12px; /* Adjust size as needed */
-  background-color: green; /* Adjust color as needed */
-  border-radius: 50%;
-  border: 2px solid white; /* Optional border */
-}
