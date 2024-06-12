@@ -107,8 +107,7 @@ const Page: React.FC = () => {
             <br /> Chipotle.
           </CardTitle>
           <h2 className="text-gray-500 text-center">
-            Find the nearest Chipotle location based on your current location or
-            search for a location.
+          Bowls That Deliver: Help Find and Rate Chipotle Locations with the Best Protein Portions!
           </h2>
         </CardHeader>
         <CardContent className="w-full flex flex-col items-center justify-center">
