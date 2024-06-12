@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
-import type { Store } from "@/components/Map";
+import type { Store } from "@/lib/models";
 
 const Page: React.FC = () => {
   const { toast } = useToast();

@@ -6,23 +6,8 @@ import L from "leaflet";
 import { Button } from "./ui/button";
 import { Slider } from "./ui/slider";
 import { useToast } from "@/components/ui/use-toast";
-
-export type Store = {
-  restaurantNumber: number;
-  name: string;
-  latitude: number;
-  longitude: number;
-  address: string;
-  averageRating?: number;
-  totalRatings?: number;
-};
-
-interface MapProps {
-  storeList: Store[];
-  lat: number;
-  lng: number;
-  onUpdateLocation: (stores: Store[], lat: number, lng: number) => void;
-}
+import type { Store } from "@/lib/models";
+import { MapProps } from "@/lib/models";
 
 const greenIcon = L.icon({
   iconUrl:

@@ -3,21 +3,8 @@ import axios from "axios";
 import { getCoords } from "@/utils/getCoords";
 import mongoose, { Schema, model, models, Document } from "mongoose";
 import connectToDatabase from "@/lib/mongodb";
-import type { Store } from "@/components/Map";
-
-interface IReview extends Document {
-  restaurantId: number;
-  rating: number;
-  createdAt: Date;
-}
-
-const reviewSchema = new Schema<IReview>({
-  restaurantId: { type: Number, required: true },
-  rating: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now },
-});
-
-const Review = models.Review || model<IReview>("Review", reviewSchema);
+import type { Store } from "@/lib/models";
+import { Review } from "@/lib/models";
 
 export async function POST(req: NextRequest) {
   try {
