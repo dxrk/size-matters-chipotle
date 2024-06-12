@@ -218,7 +218,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
       <MapContainer
         center={[lat, lng]}
         zoom={13}
-        style={{ height: "500px", width: "100%" }}
+        style={{ height: "625px", width: "100%" }}
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
