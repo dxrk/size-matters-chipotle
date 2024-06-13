@@ -145,7 +145,7 @@ const getLabel = (value: number | undefined) => {
 
 const ReviewForm = ({ restaurantId }: { restaurantId: number }) => {
   const { toast } = useToast();
-  const [rating, setRating] = useState([2]);
+  const [rating, setRating] = useState([5]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
