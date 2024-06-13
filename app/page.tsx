@@ -107,7 +107,8 @@ const Page: React.FC = () => {
             <br /> Chipotle.
           </CardTitle>
           <h2 className="text-gray-500 text-center">
-          Bowls That Deliver: Help Find and Rate Chipotle Locations with the Best Protein Portions!
+            Bowls that deliver: Find and rate Chipotle locations with the best
+            portions!
           </h2>
         </CardHeader>
         <CardContent className="w-full flex flex-col items-center justify-center">
