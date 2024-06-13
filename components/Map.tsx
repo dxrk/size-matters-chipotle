@@ -219,6 +219,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
         center={[lat, lng]}
         zoom={13}
         style={{ height: "625px", width: "100%" }}
+        className="font-mono"
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
@@ -236,16 +237,18 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
                   icon={label.icon}
                 >
                   <Popup minWidth={200} maxWidth={300} className="custom-popup">
-                    <h2 className="text-base font-bold">{location.name}</h2>
+                    <h2 className="text-base font-bold font-mono">
+                      {location.name}
+                    </h2>
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xxs text-gray-500"
+                      className="text-xxs text-gray-500 font-mono"
                     >
                       {location.address}
                     </a>
-                    <div className="mb-3">
+                    <div className="mb-3 font-mono">
                       {location.averageRating ? (
                         <div className={`pt-2 pb-2`}>
                           <div
@@ -267,7 +270,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
                         </div>
                       )}
                     </div>
-                    <div className="border-t border-gray-300 pt-3 mt-3">
+                    <div className="border-t border-gray-300 pt-3 mt-3 font-mono">
                       <h3 className="text-sm font-semibold">
                         Rate Your Portion Size!
                       </h3>
