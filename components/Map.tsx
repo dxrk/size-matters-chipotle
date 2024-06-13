@@ -12,7 +12,7 @@ import { MapProps } from "@/lib/models";
 const greenIcon = L.icon({
   iconUrl:
     "https://upload.wikimedia.org/wikipedia/commons/2/2d/Basic_green_dot.png",
-  iconSize: [12, 12],
+  iconSize: [15, 15],
 });
 
 const greyIcon = L.icon({
