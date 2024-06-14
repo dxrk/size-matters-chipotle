@@ -14,7 +14,7 @@ export async function POST(
   context: { params: { restaurantId: string } }
 ) {
   await connectToDatabase();
-  
+
   // Apply rate limiter
   const rateLimitResponse = rateLimiterMiddleware(req);
   if (rateLimitResponse.status === 429) {
@@ -22,11 +22,17 @@ export async function POST(
   }
 
   // Get rating from request body
-  const { rating } = await req.json();
+  const { rating, storeType } = await req.json();
   const { restaurantId } = context.params;
 
   // Create and save the review
-  const review = new Review({ restaurantId: Number(restaurantId), rating });
+  const review = new Review({
+    restaurantId: Number(restaurantId),
+    rating,
+    createdAt: new Date(),
+    dummyData: false,
+    storeType,
+  });
   await review.save();
 
   // Return the created review
