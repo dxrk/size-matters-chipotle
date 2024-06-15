@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import { Popover as HeadlessPopover } from '@headlessui/react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { ReactNode } from "react";
+import { Popover as HeadlessPopover } from "@headlessui/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface PopoverProps {
   children: ReactNode;
@@ -9,7 +9,12 @@ interface PopoverProps {
   [key: string]: any;
 }
 
-const Popover: React.FC<PopoverProps> = ({ children, content, className = '', ...props }) => {
+const Popover: React.FC<PopoverProps> = ({
+  children,
+  content,
+  className = "",
+  ...props
+}) => {
   return (
     <HeadlessPopover className={`relative ${className}`} {...props}>
       {({ open }) => (
