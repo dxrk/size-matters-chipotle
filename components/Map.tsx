@@ -295,7 +295,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
             <Button
               variant="outline"
               onClick={() => setSelectedStore(null)}
-              className="w-full"
+              className="w-full mt-2"
             >
               Close
             </Button>
