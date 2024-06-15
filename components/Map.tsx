@@ -341,7 +341,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
                     {location.averageRating ? (
                       <div className={`pt-2 pb-2`}>
                         <div className={`font-semibold text-sm ${label.color}`}>
-                          Average Review: {label.text} (
+                          Average: {label.text} (
                           {location.averageRating.toFixed(1)})
                         </div>
                         {location.totalRatings ? (
