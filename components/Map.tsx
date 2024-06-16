@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { DownArrow, UpArrow } from "@/components/ui/icons";
 import { LocateButton } from "@/components/LocateButton";
 import { ReviewForm } from "@/components/ReviewForm";
-import { getLabel } from "@/components/ReviewForm";
+import { getLabel } from "@/components/ReviewForm"; // Ensure this import is correct
 
 const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
@@ -43,9 +43,8 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
     setSelectedStore(null);
   };
 
-  const label = getLabel(storeList[0]?.averageRating);
-
   const renderPopupOrDrawer = (location: Store) => {
+    const label = getLabel(location.averageRating); // Ensure this usage
     if (isMobile)
       return (
         <Drawer
@@ -100,72 +99,76 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
 
         {storeList.length > 0 && (
           <>
-            {storeList.map((location) => (
-              <Marker
-                key={location.restaurantNumber}
-                position={[location.latitude, location.longitude]}
-                icon={getLabel(location.averageRating).icon}
-              >
-                <Popup minWidth={200} maxWidth={300} className="custom-popup">
-                  <h2 className="text-base font-bold font-mono">
-                    {location.name}
-                  </h2>
-                  <a
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xxs text-gray-500 font-mono"
-                  >
-                    {location.address}
-                  </a>
-                  <div className="mb-2 font-mono">
-                    {location.averageRating ? (
-                      <div className={`pt-2 pb-2`}>
-                        <div className={`font-semibold text-sm ${label.color}`}>
-                          Average: {label.text} (
-                          {location.averageRating.toFixed(1)})
-                        </div>
-                        {location.totalRatings ? (
-                          <div className="text-gray-400 text-xxs">
-                            ({location.totalRatings} review
-                            {location.totalRatings !== 1 ? "s" : ""})
+            {storeList.map((location) => {
+              const label = getLabel(location.averageRating); // Ensure this usage
+              return (
+                <Marker
+                  key={location.restaurantNumber}
+                  position={[location.latitude, location.longitude]}
+                  icon={label.icon}
+                >
+                  <Popup minWidth={200} maxWidth={300} className="custom-popup">
+                    <h2 className="text-base font-bold font-mono">
+                      {location.name}
+                    </h2>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xxs text-gray-500 font-mono"
+                    >
+                      {location.address}
+                    </a>
+                    <div className="mb-2 font-mono">
+                      {location.averageRating ? (
+                        <div className={`pt-2 pb-2`}>
+                          <div className={`font-semibold text-sm ${label.color}`}>
+                            Average: {label.text} (
+                            {location.averageRating.toFixed(1)})
                           </div>
-                        ) : null}
-                      </div>
-                    ) : (
-                      <div className="text-gray-500 text-xxs">
-                        No reviews yet
-                      </div>
-                    )}
-                  </div>
-                  <Separator />
-                  <Button
-                    variant="ghost"
-                    className="w-full mt-2"
-                    onClick={() =>
-                      setSelectedStore(
-                        selectedStore === location.restaurantNumber
-                          ? null
-                          : location.restaurantNumber
-                      )
-                    }
-                  >
-                    Rate Your Portion Size!{" "}
-                    {selectedStore === location.restaurantNumber
-                      ? UpArrow({ className: "ml-4 w-4 h-4" })
-                      : DownArrow({ className: "ml-4 w-4 h-4" })}
-                  </Button>
-                  {!isMobile && selectedStore === location.restaurantNumber && (
-                    <ReviewForm
-                      restaurantId={location.restaurantNumber}
-                      onSubmitSuccess={handleReviewSubmitSuccess}
-                    />
-                  )}
-                </Popup>
-                {selectedStore === location.restaurantNumber &&
-                  renderPopupOrDrawer(location)}
-              </Marker>
-            ))}
+                          {location.totalRatings ? (
+                            <div className="text-gray-400 text-xxs">
+                              ({location.totalRatings} review
+                              {location.totalRatings !== 1 ? "s" : ""})
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : (
+                        <div className="text-gray-500 text-xxs">
+                          No reviews yet
+                        </div>
+                      )}
+                    </div>
+                    <Separator />
+                    <Button
+                      variant="ghost"
+                      className="w-full mt-2"
+                      onClick={() =>
+                        setSelectedStore(
+                          selectedStore === location.restaurantNumber
+                            ? null
+                            : location.restaurantNumber
+                        )
+                      }
+                    >
+                      Rate Your Portion Size!{" "}
+                      {selectedStore === location.restaurantNumber
+                        ? UpArrow({ className: "ml-4 w-4 h-4" })
+                        : DownArrow({ className: "ml-4 w-4 h-4" })}
+                    </Button>
+                    {!isMobile &&
+                      selectedStore === location.restaurantNumber && (
+                        <ReviewForm
+                          restaurantId={location.restaurantNumber}
+                          onSubmitSuccess={handleReviewSubmitSuccess}
+                        />
+                      )}
+                  </Popup>
+                  {selectedStore === location.restaurantNumber &&
+                    renderPopupOrDrawer(location)}
+                </Marker>
+              );
+            })}
           </>
         )}
         <FlyToHandler lat={lat} lng={lng} />
