@@ -1,3 +1,4 @@
+// page.tsx
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
@@ -14,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { fetchStoreData } from "@/lib/utils";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -26,29 +28,12 @@ const Page: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("New York, NY");
   const [lat, setLat] = useState<number>(40.7128);
   const [lng, setLng] = useState<number>(-74.006);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = async () => {
-    if (!searchTerm) {
-      return;
-    }
+    setLoading(true);
     try {
-      const res = await fetch(`/api/getLocations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: searchTerm }),
-      });
-      if (!res.ok) {
-        toast({
-          title: "Error",
-          description: "Failed to fetch data",
-          variant: "destructive",
-        });
-      }
-
-      const data: any = await res.json();
-
+      const data = await fetchStoreData(searchTerm);
       if (data.stores) {
         setStoreList(data.stores);
       } else {
@@ -58,7 +43,6 @@ const Page: React.FC = () => {
           variant: "destructive",
         });
       }
-
       if (data.coords) {
         setLat(data.coords.lat);
         setLng(data.coords.lng);
@@ -69,12 +53,14 @@ const Page: React.FC = () => {
           variant: "destructive",
         });
       }
-    } catch (err: any) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: err.message,
+        description: error.message,
         variant: "destructive",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -119,9 +105,14 @@ const Page: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={handleKeyPress}
             className="mb-4 w-3/4 text-center"
+            disabled={loading}
           />
-          <Button onClick={handleSearch} className="mb-4 w-3/4">
-            Search
+          <Button
+            onClick={handleSearch}
+            className="mb-4 w-3/4"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Search"}
           </Button>
           <div className="w-full">
             <Map

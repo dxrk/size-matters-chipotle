@@ -26,6 +26,7 @@ import { LocateButton } from "@/components/LocateButton";
 import { ReviewForm } from "@/components/ReviewForm";
 import { getLabel } from "@/components/ReviewForm";
 import { useToast } from "@/components/ui/use-toast";
+import { fetchStoreData } from "@/lib/utils";
 
 const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
@@ -37,7 +38,6 @@ const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   return null;
 };
 
-// TODO: Probably don't need all of this code since it's already in page.tsx, can probably consolidate to a util function.
 const HandleDragEnd = ({
   onUpdateLocation,
 }: {
@@ -46,27 +46,10 @@ const HandleDragEnd = ({
   const { toast } = useToast();
 
   const map = useMapEvents({
-    dragend: async (e) => {
+    dragend: async () => {
       const center = map.getCenter();
-
       try {
-        const res = await fetch(`/api/getLocations`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ address: `${center.lat}, ${center.lng}` }),
-        });
-        if (!res.ok) {
-          toast({
-            title: "Error",
-            description: "Failed to fetch data",
-            variant: "destructive",
-          });
-        }
-
-        const data: any = await res.json();
-
+        const data = await fetchStoreData(`${center.lat}, ${center.lng}`);
         if (data.stores) {
           onUpdateLocation(data.stores, center.lat, center.lng);
         } else {
