@@ -89,7 +89,7 @@ export const ReviewForm = ({
       style={{ display: "flex", flexDirection: "column", width: "100%" }}
     >
       <div>
-        <div className={`mt-4 ${label.color} text-xs`}>
+        <div className={`mt-4 ${label.color} text-xs font-mono`}>
           {`${label.text} (${rating[0]})`}
         </div>
         <Slider
@@ -102,7 +102,7 @@ export const ReviewForm = ({
           style={{ width: "100%", marginTop: "10px" }}
         />
       </div>
-      <div className="flex items-center justify-center mb-4">
+      <div className="flex items-center justify-center mb-4 font-mono">
         <RadioGroup
           defaultValue="instore"
           onValueChange={setStoreType}
@@ -136,7 +136,7 @@ export const ReviewForm = ({
       </div>
       <Button
         type="submit"
-        className="w-full"
+        className="w-full font-mono"
         style={{ width: "100%", marginTop: "10px" }}
       >
         Submit Review

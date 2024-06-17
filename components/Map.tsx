@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { DownArrow, UpArrow } from "@/components/ui/icons";
 import { LocateButton } from "@/components/LocateButton";
 import { ReviewForm } from "@/components/ReviewForm";
-import { getLabel } from "@/components/ReviewForm"; // Ensure this import is correct
+import { getLabel } from "@/components/ReviewForm";
 
 const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
@@ -29,7 +29,6 @@ const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   return null;
 };
 
-// on drag, update the location
 const HandleDragEnd = (e: any, onUpdateLocation: Function) => {
   const lat = e.target.getLatLng().lat;
   const lng = e.target.getLatLng().lng;
@@ -44,7 +43,6 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
   };
 
   const renderPopupOrDrawer = (location: Store) => {
-    const label = getLabel(location.averageRating); // Ensure this usage
     if (isMobile)
       return (
         <Drawer
@@ -53,7 +51,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
             setSelectedStore(open ? location.restaurantNumber : null)
           }
         >
-          <DrawerContent className="z-[1500] pl-6 pr-6">
+          <DrawerContent className="z-[1500] pl-6 pr-6 font-mono">
             <DrawerHeader>
               <DrawerTitle>{location.name}</DrawerTitle>
               <DrawerDescription>
@@ -85,7 +83,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative font-mono">
       <MapContainer
         center={[lat, lng]}
         zoom={13}
@@ -100,7 +98,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
         {storeList.length > 0 && (
           <>
             {storeList.map((location) => {
-              const label = getLabel(location.averageRating); // Ensure this usage
+              const label = getLabel(location.averageRating);
               return (
                 <Marker
                   key={location.restaurantNumber}
@@ -122,7 +120,9 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
                     <div className="mb-2 font-mono">
                       {location.averageRating ? (
                         <div className={`pt-2 pb-2`}>
-                          <div className={`font-semibold text-sm ${label.color}`}>
+                          <div
+                            className={`font-semibold text-sm ${label.color}`}
+                          >
                             Average: {label.text} (
                             {location.averageRating.toFixed(1)})
                           </div>
