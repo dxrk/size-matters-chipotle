@@ -7,6 +7,7 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import type { Store } from "@/lib/models";
@@ -27,6 +28,20 @@ import { ReviewForm } from "@/components/ReviewForm";
 import { getLabel } from "@/components/ReviewForm";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchStoreData } from "@/lib/utils";
+
+// React Strict Mode can remount before Leaflet clears the container id.
+if (typeof window !== "undefined") {
+  const mapPrototype = L.Map.prototype as L.Map & {
+    _initContainer: (obj: HTMLElement) => void;
+  };
+  const originalInitContainer = mapPrototype._initContainer;
+  mapPrototype._initContainer = function (this: L.Map, obj: HTMLElement) {
+    if (obj && "_leaflet_id" in obj) {
+      delete (obj as HTMLElement & { _leaflet_id?: number })._leaflet_id;
+    }
+    return originalInitContainer.call(this, obj);
+  };
+}
 
 const FlyToHandler = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
@@ -73,7 +88,13 @@ const HandleDragEnd = ({
 };
 
 const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
+  const [mounted, setMounted] = useState(false);
   const [selectedStore, setSelectedStore] = useState<number | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   const handleReviewSubmitSuccess = () => {
     setSelectedStore(null);
@@ -121,6 +142,7 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
 
   return (
     <div className="relative font-mono">
+      {mounted ? (
       <MapContainer
         center={[lat, lng]}
         zoom={13}
@@ -212,6 +234,9 @@ const Map: React.FC<MapProps> = ({ storeList, lat, lng, onUpdateLocation }) => {
         <HandleDragEnd onUpdateLocation={onUpdateLocation} />
         <LocateButton onUpdateLocation={onUpdateLocation} />
       </MapContainer>
+      ) : (
+        <div style={{ height: "625px", width: "100%" }} />
+      )}
     </div>
   );
 };
